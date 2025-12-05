@@ -1,33 +1,40 @@
-name: 'build-test'
+name: "Verify PR"
+
 on:
   pull_request:
-  # push:
-  #   branches:
-  #     - main
+
+env:
+  NODE_VERSION: 20.x
 
 jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
-        uses: actions/setup-node@v3
+      - name: "Set Node.js ${{ env.NODE_VERSION }}"
+        uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: "${{ env.NODE_VERSION }}"
 
       - name: Install dependencies
         run: |
           npm install
 
-      - name: Run npm all script
+      - name: Run test
         run: |
-          npm run all
+          npm run test --if-present
         env:
-          NODE_ENV: 'production'
+          NODE_ENV: "test"
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           OWNER: ${{ secrets.TEST_OWNER }}
           REPO: ${{ secrets.TEST_REPO }}
+
+      - name: Run npm all script
+        run: |
+          npm run all
+        # env:
+        #   NODE_ENV: 'production'
 
       - name: Logging github.ref
         run: |
@@ -40,12 +47,9 @@ jobs:
         uses: ./
         id: next_version_proposal
         with:
-          github_token: ${{ github.token }}
-          pr: ${{ github.event.pull_request.number }}
-          major_labels: 'major, next'
-          minor_labels: 'feature, enhancement'
-          patch_labels: 'bug, dependencies, chore, documentation'
-          next_version_prefix: 'v'
+          next_version_prefix: "v"
+          owner: ${{ github.event.repository.owner.login }}
+          repo: ${{ github.event.repository.name }}
 
       - name: log
         run: |
