@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
 
       - name: "Set Node.js ${{ env.NODE_VERSION }}"
         uses: actions/setup-node@v4
@@ -57,7 +57,7 @@ jobs:
   #     next_version: ${{ steps.next_version_proposal.outputs.next_version }}
   #   steps:
   #     - name: Checkout
-  #       uses: actions/checkout@v4
+  #       uses: actions/checkout@v6.0.2
 
   #     - name: 'get next version name'
   #       uses: bbonkr/next-version-proposal-action@v1
@@ -113,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
 
       - name: Set Node.js 18.x
         uses: actions/setup-node@v4
